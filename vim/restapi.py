@@ -2,10 +2,10 @@ import frappe
 from erpnext.shopping_cart.product_query import ProductQuery
 from erpnext.shopping_cart.filters import ProductFiltersBuilder
 from vim.api import get_product_info_for_website as get_product_info
-from erpnext.shopping_cart.product_info import get_product_info_for_website
+from erpnext.e_commerce.shopping_cart.product_info import get_product_info_for_website
 from frappe.utils import cstr
 from vim.api import sign_up 
-from erpnext.shopping_cart.cart import _get_cart_quotation 
+from erpnext.e_commerce.shopping_cart.cart import _get_cart_quotation 
 from frappe import  _ 
 from frappe.utils import escape_html
 from frappe.utils.oauth import get_oauth2_flow,get_oauth2_providers,get_info_via_oauth

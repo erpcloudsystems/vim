@@ -5,7 +5,7 @@ from __future__ import unicode_literals
 import frappe
 
 from frappe import _
-#from erpnext.shopping_cart.doctype.shopping_cart_settings.shopping_cart_settings import show_attachments
+from erpnext.e_commerce.doctype.e_commerce_settings.shopping_cart_settings import show_attachments
 
 def get_context(context):
 	context.no_cache = 1

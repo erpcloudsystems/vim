@@ -23,7 +23,7 @@ from frappe.contacts.doctype.contact.contact import get_contact_name
 import json
 import copy
 import re
-from erpnext.shopping_cart.cart import  _get_cart_quotation
+from erpnext.e_commerce.shopping_cart.cart import  _get_cart_quotation
 
 
 from six import string_types

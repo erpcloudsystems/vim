@@ -2,8 +2,8 @@ from curses.ascii import NUL
 from pickle import FALSE
 import frappe
 from frappe import throw, _
-# from erpnext.shopping_cart.doctype.shopping_cart_settings.shopping_cart_settings \
-# 	import get_shopping_cart_settings, show_quantity_in_website
+from erpnext.e_commerce.doctype.e_commerce_settings.e_commerce_settings \
+	import get_shopping_cart_settings, show_quantity_in_website
 from erpnext.shopping_cart.cart import _get_cart_quotation, _set_price_list
 from erpnext.utilities.product import get_price as get_price_default, get_qty_in_stock, get_non_stock_item_status
 from frappe.utils import flt,cint,fmt_money
