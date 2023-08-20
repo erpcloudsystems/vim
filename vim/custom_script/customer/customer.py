@@ -244,18 +244,19 @@ def after_insert(self,method):
 	# frappe.throw("Test")
 	# if from_utils :
 		# frappe.errprint(self.as_dict())
-		if not self.first_name and not self.last_name :
-			fullname = self.name
-			from erpnext.shopping_cart.doctype.shopping_cart_settings.shopping_cart_settings import get_shopping_cart_settings
-			from frappe.utils.nestedset import get_root_of
-			self.full_name = fullname
-			self.first_name = fullname.split()[0]
-			self.last_name = ''.join(fullname.split()[1:]) if len(fullname.split()) > 1 else ""
-			self.customer_name =  fullname
-			self.customer_type = "Individual"
-			cart_settings = get_shopping_cart_settings()
-			self.customer_group = cart_settings.default_customer_group
-			self.territory = get_root_of("Territory")
-			self.save()
+		# if not self.first_name and not self.last_name :
+		# 	fullname = self.name
+		# 	from erpnext.shopping_cart.doctype.shopping_cart_settings.shopping_cart_settings import get_shopping_cart_settings
+		# 	from frappe.utils.nestedset import get_root_of
+		# 	self.full_name = fullname
+		# 	self.first_name = fullname.split()[0]
+		# 	self.last_name = ''.join(fullname.split()[1:]) if len(fullname.split()) > 1 else ""
+		# 	self.customer_name =  fullname
+		# 	self.customer_type = "Individual"
+		# 	cart_settings = get_shopping_cart_settings()
+		# 	self.customer_group = cart_settings.default_customer_group
+		# 	self.territory = get_root_of("Territory")
+		# 	self.save()
 			# self.mobile_no = frappe.db.get_value('User', {"email": frappe.session.user} , 'mobile_no')
 			# self.email_id = frappe.session.user
+	pass
