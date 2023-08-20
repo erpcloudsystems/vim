@@ -1,0 +1,51 @@
+<style>
+    .main-report-container{
+        position: relative;
+    }
+
+    .main-report-container .backdrop{
+        display: none;
+        position:absolute;
+        height: 100%;
+        width: 100%;
+        top: 0;
+        background-color: white;
+        opacity: 0.5;
+    }
+
+    .main-report-container button {
+        float: right;
+    }
+</style>
+
+<div class="main-report-container">
+    <div class="backdrop"></div>
+    <button class="btn btn-primary" onclick="downloadpdf();">Download</button>
+    <div id="report_container">
+        {{body}}
+    </div>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"
+    integrity="sha512-GsLlZN/3F2ErC5ifS5QtgpiJtWd43JWSuIgh7mbzZ8zBps+dvLusV+eNQATqgA/HdeKFVgA5v3S/cIrLF7QnIg=="
+    crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+
+<script>
+    function downloadpdf() {
+        var backdrop = $('.main-report-container .backdrop')
+        backdrop.css("display", "block")
+
+        var elem = document.getElementById('report_container');
+        var opt = {
+            margin: 1,
+            filename: 'Invoice.pdf',
+            image: { type: 'jpeg', quality: 0.98 },
+            html2canvas: { scale: 2 },
+            jsPDF: { unit: 'in', format: 'letter', orientation: 'portrait' }
+        };
+
+        html2pdf().set(opt).from(elem).save().then(()=>{
+            backdrop.css("display", "none")
+        });
+    }
+</script>

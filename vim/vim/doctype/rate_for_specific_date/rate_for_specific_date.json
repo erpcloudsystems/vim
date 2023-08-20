@@ -1,0 +1,38 @@
+{
+ "actions": [],
+ "creation": "2021-11-10 11:21:06.006608",
+ "doctype": "DocType",
+ "editable_grid": 1,
+ "engine": "InnoDB",
+ "field_order": [
+  "date",
+  "rate_applicable"
+ ],
+ "fields": [
+  {
+   "fieldname": "date",
+   "fieldtype": "Date",
+   "in_list_view": 1,
+   "label": "Date"
+  },
+  {
+   "fieldname": "rate_applicable",
+   "fieldtype": "Select",
+   "in_list_view": 1,
+   "label": "Rate applicable",
+   "options": "Weekday\nWeekend"
+  }
+ ],
+ "index_web_pages_for_search": 1,
+ "istable": 1,
+ "links": [],
+ "modified": "2021-11-13 11:23:59.132195",
+ "modified_by": "Administrator",
+ "module": "VIM",
+ "name": "Rate for Specific Date",
+ "owner": "Administrator",
+ "permissions": [],
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "track_changes": 1
+}

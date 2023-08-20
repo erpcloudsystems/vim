@@ -1,0 +1,98 @@
+{% extends "templates/web.html" %}
+
+{% block title %} Payment {% endblock %}
+
+{%- block header -%}{% endblock %}
+
+{% block script %}
+
+<script>
+    
+    $(document).ready(function(){
+	
+	(function(e){
+		var options = {			
+			"amount": cint("{{ amount }}" * 100), // 2000 paise = INR 20
+			"name": "{{ title }}",
+			"description": "{{ description }}",
+			"subscription_id": "{{ subscription_id }}",	
+            "token"	:	"{{ token }}",
+			"prefill": {
+				"name": "{{ payer_name }}",
+				"email": "{{ payer_email }}",
+				"order_id": "{{ order_id }}"
+			}
+		};
+        make_payment_log(options, "{{ reference_doctype }}", "{{ reference_docname }}", "{{ token }}","{{ checkout }}","{{ amount }}","{{entityId}}");
+	})();
+	
+})
+
+frappe.provide('copyandpay');
+function make_payment_log(options,doctype, docname, token,checkout,amount,entityid){
+	$('.copyandpay-loading').addClass('hidden');
+	$('.copyandpay-confirming').removeClass('hidden');
+    console.log(amount,entityid)
+	frappe.call({
+            method: "vim.vim.doctype.copyandpay_settings.copyandpay_settings.payment_request",
+            args:{"checkout_id":checkout},
+            callback: function (r, rt) {
+               
+                if(r && r.message){
+                    console.log(checkout,r.message.ndc)
+                    if(r.message.id &&  checkout==r.message.ndc)
+                    {
+                        frappe.call({
+							method:"vim.custom_script.copyandpay.copyandpay_checkout.make_payment",
+							freeze:true,
+							headers: {"X-Requested-With": "XMLHttpRequest"},
+							args: {
+                                "copyandpay_payment_id":r.message.id,
+								"options": options,
+								"reference_doctype": doctype,
+								"reference_docname": docname,
+								"token": token,
+           						 "checkoutid":checkout
+							},
+							callback: function(rp){
+                                
+								if (rp.message && rp.message.status == "Completed") {
+                                    console.log(rp.message.redirect_to,"rpmessage")
+									window.location.href = rp.message.redirect_to
+								}
+								else if (rp.message && ([401,400,500].indexOf(rp.message.status) > -1)) {
+                                    console.log(rp.message.redirect_to,"rpmessage")
+							        window.location.href = rp.message.redirect_to
+			                        }
+		}
+	})
+                    
+                    }
+					
+                }
+            }
+        });
+
+}
+
+	
+</script>
+{% endblock %}
+
+{%- block page_content -%}
+
+<p class='lead text-center centered'>
+	<span class='copyandpay-loading'>Loading Payment System</span>
+	<span class='copyandpay-confirming hidden'>Confirming Payment</span>
+</p>
+
+{% endblock %}
+
+{% block style %}
+<style>
+	header, footer {
+		display: none;
+	}
+
+</style>
+{% endblock %}

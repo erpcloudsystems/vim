@@ -1,0 +1,239 @@
+{
+ "actions": [],
+ "creation": "2022-08-08 09:06:12.728421",
+ "doctype": "DocType",
+ "editable_grid": 1,
+ "engine": "InnoDB",
+ "field_order": [
+  "update_packed_item",
+  "update_ledger_entry",
+  "column_break_3",
+  "update_bundle_double_qty",
+  "make_gl_entries",
+  "section_break_6",
+  "company",
+  "warehouse",
+  "voucher_type",
+  "voucher_no",
+  "sales_invoice_name",
+  "parent_item",
+  "set_no",
+  "item_code",
+  "target_warehouse",
+  "posting_date",
+  "posting_time",
+  "sales_invoice_qty",
+  "bundle_qty",
+  "total_quantity",
+  "rate",
+  "uom",
+  "column_break_23",
+  "default_item_in_pos",
+  "allow_zero_valuation_rate",
+  "sales_invoice_item",
+  "dn_detail",
+  "incoming_rate",
+  "cost_center",
+  "expense_account",
+  "income_account",
+  "is_updated",
+  "is_stock_updated",
+  "is_gl_created"
+ ],
+ "fields": [
+  {
+   "fieldname": "update_packed_item",
+   "fieldtype": "Button",
+   "label": "Update Packed Item"
+  },
+  {
+   "fieldname": "update_ledger_entry",
+   "fieldtype": "Button",
+   "label": "Update Ledger Entry"
+  },
+  {
+   "fieldname": "column_break_3",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "update_bundle_double_qty",
+   "fieldtype": "Button",
+   "label": "Update Bundle Double Qty"
+  },
+  {
+   "fieldname": "make_gl_entries",
+   "fieldtype": "Button",
+   "label": "Make Gl Entries"
+  },
+  {
+   "fieldname": "section_break_6",
+   "fieldtype": "Section Break"
+  },
+  {
+   "fieldname": "company",
+   "fieldtype": "Data",
+   "label": "company"
+  },
+  {
+   "fieldname": "warehouse",
+   "fieldtype": "Data",
+   "label": "warehouse"
+  },
+  {
+   "fieldname": "voucher_type",
+   "fieldtype": "Data",
+   "label": "voucher_type"
+  },
+  {
+   "fieldname": "voucher_no",
+   "fieldtype": "Data",
+   "label": "voucher_no"
+  },
+  {
+   "fieldname": "sales_invoice_name",
+   "fieldtype": "Data",
+   "label": "Sales Invoice name"
+  },
+  {
+   "fieldname": "parent_item",
+   "fieldtype": "Data",
+   "label": "parent_item"
+  },
+  {
+   "fieldname": "set_no",
+   "fieldtype": "Data",
+   "label": "set_no"
+  },
+  {
+   "fieldname": "item_code",
+   "fieldtype": "Data",
+   "label": "item_code"
+  },
+  {
+   "fieldname": "target_warehouse",
+   "fieldtype": "Data",
+   "label": "target_warehouse"
+  },
+  {
+   "fieldname": "posting_date",
+   "fieldtype": "Date",
+   "label": "posting_date"
+  },
+  {
+   "fieldname": "posting_time",
+   "fieldtype": "Time",
+   "label": "posting_time"
+  },
+  {
+   "fieldname": "sales_invoice_qty",
+   "fieldtype": "Float",
+   "label": "Sales Invoice qty"
+  },
+  {
+   "fieldname": "bundle_qty",
+   "fieldtype": "Float",
+   "label": "Bundle qty"
+  },
+  {
+   "fieldname": "total_quantity",
+   "fieldtype": "Float",
+   "label": "total quantity"
+  },
+  {
+   "fieldname": "rate",
+   "fieldtype": "Float",
+   "label": "rate"
+  },
+  {
+   "fieldname": "uom",
+   "fieldtype": "Data",
+   "label": "uom"
+  },
+  {
+   "fieldname": "column_break_23",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "default_item_in_pos",
+   "fieldtype": "Data",
+   "label": "default_item_in_pos"
+  },
+  {
+   "fieldname": "allow_zero_valuation_rate",
+   "fieldtype": "Int",
+   "label": "allow_zero_valuation_rate"
+  },
+  {
+   "fieldname": "sales_invoice_item",
+   "fieldtype": "Data",
+   "label": "sales_invoice_item"
+  },
+  {
+   "fieldname": "dn_detail",
+   "fieldtype": "Data",
+   "label": "dn_detail"
+  },
+  {
+   "fieldname": "incoming_rate",
+   "fieldtype": "Float",
+   "label": "incoming_rate"
+  },
+  {
+   "fieldname": "cost_center",
+   "fieldtype": "Data",
+   "label": "Cost Center"
+  },
+  {
+   "fieldname": "expense_account",
+   "fieldtype": "Data",
+   "label": "expense_account"
+  },
+  {
+   "fieldname": "income_account",
+   "fieldtype": "Data",
+   "label": "income_account"
+  },
+  {
+   "default": "0",
+   "fieldname": "is_updated",
+   "fieldtype": "Check",
+   "label": "Is Updated"
+  },
+  {
+   "default": "0",
+   "fieldname": "is_stock_updated",
+   "fieldtype": "Check",
+   "label": "Is Stock Updated"
+  },
+  {
+   "default": "0",
+   "fieldname": "is_gl_created",
+   "fieldtype": "Check",
+   "label": "Is GL Created"
+  }
+ ],
+ "index_web_pages_for_search": 1,
+ "links": [],
+ "modified": "2022-08-08 09:06:12.728421",
+ "modified_by": "Administrator",
+ "module": "VIM",
+ "name": "Sales Invoice Packed Item",
+ "owner": "Administrator",
+ "permissions": [
+  {
+   "create": 1,
+   "delete": 1,
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "System Manager",
+   "share": 1,
+   "write": 1
+  }
+ ],
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "track_changes": 1
+}

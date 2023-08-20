@@ -1,0 +1,65 @@
+{
+ "actions": [],
+ "autoname": "UPCLS.#####",
+ "creation": "2022-08-20 13:24:53.493840",
+ "doctype": "DocType",
+ "editable_grid": 1,
+ "engine": "InnoDB",
+ "field_order": [
+  "posting_date",
+  "column_break_2",
+  "update_closing",
+  "section_break_4",
+  "closing_detail"
+ ],
+ "fields": [
+  {
+   "fieldname": "posting_date",
+   "fieldtype": "Date",
+   "label": "Posting Date"
+  },
+  {
+   "fieldname": "closing_detail",
+   "fieldtype": "Table",
+   "label": "Closing Detail",
+   "options": "UPDATE POS CLOSING ENTRY Child"
+  },
+  {
+   "fieldname": "column_break_2",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "update_closing",
+   "fieldtype": "Button",
+   "label": "Update Closing"
+  },
+  {
+   "fieldname": "section_break_4",
+   "fieldtype": "Section Break"
+  }
+ ],
+ "index_web_pages_for_search": 1,
+ "links": [],
+ "modified": "2022-08-20 13:44:17.148222",
+ "modified_by": "Administrator",
+ "module": "VIM",
+ "name": "UPDATE POS CLOSING ENTRY",
+ "owner": "Administrator",
+ "permissions": [
+  {
+   "create": 1,
+   "delete": 1,
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "System Manager",
+   "share": 1,
+   "write": 1
+  }
+ ],
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "track_changes": 1
+}

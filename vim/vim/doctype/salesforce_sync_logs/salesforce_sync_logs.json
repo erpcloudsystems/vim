@@ -1,0 +1,86 @@
+{
+ "actions": [],
+ "creation": "2022-03-08 16:05:45.609196",
+ "doctype": "DocType",
+ "editable_grid": 1,
+ "engine": "InnoDB",
+ "field_order": [
+  "api_endpoint",
+  "in_out",
+  "request_body",
+  "status",
+  "response_body",
+  "sync_time",
+  "error_message"
+ ],
+ "fields": [
+  {
+   "fieldname": "api_endpoint",
+   "fieldtype": "Data",
+   "label": "Api Endpoint",
+   "read_only": 1
+  },
+  {
+   "fieldname": "request_body",
+   "fieldtype": "Markdown Editor",
+   "label": "Request Body",
+   "read_only": 1
+  },
+  {
+   "fieldname": "status",
+   "fieldtype": "Select",
+   "in_list_view": 1,
+   "label": "Status",
+   "options": "\nSuccess\nError"
+  },
+  {
+   "fieldname": "response_body",
+   "fieldtype": "Markdown Editor",
+   "label": "Response Body",
+   "read_only": 1
+  },
+  {
+   "fieldname": "sync_time",
+   "fieldtype": "Datetime",
+   "label": "Sync Time",
+   "read_only": 1
+  },
+  {
+   "fieldname": "error_message",
+   "fieldtype": "Markdown Editor",
+   "label": "Error Message",
+   "read_only": 1
+  },
+  {
+   "fieldname": "in_out",
+   "fieldtype": "Select",
+   "label": "Incoming/Outgoing",
+   "options": "Incoming\nOutgoing",
+   "read_only": 1
+  }
+ ],
+ "index_web_pages_for_search": 1,
+ "links": [],
+ "modified": "2022-08-25 15:07:33.497369",
+ "modified_by": "Administrator",
+ "module": "VIM",
+ "name": "Salesforce Sync Logs",
+ "owner": "Administrator",
+ "permissions": [
+  {
+   "create": 1,
+   "delete": 1,
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "System Manager",
+   "share": 1,
+   "write": 1
+  }
+ ],
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "track_changes": 1
+}

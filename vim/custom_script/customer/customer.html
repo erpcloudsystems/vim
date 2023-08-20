@@ -1,0 +1,18 @@
+<body>
+	<!-- Include Hijri.js in your work -->
+	<script type="text/javascript" src="VIM/public/js/Hijri.js"></script>
+
+	<!-- Input Area -->
+	<input id="gregorianInput" onchange="convertToHijri()" />
+	&nbsp; <span id="hijriDate"></span>
+
+	<script type="text/javascript">
+	function convertToHijri() {
+		var gregorianDate = document.getElementById("gregorianInput").value
+		var hijriDate = document.getElementById("hijriDate");
+
+		var date = HijriJS.toHijri(gregorianDate, "/");
+		hijriDate.innerHTML = date.toString();
+	}
+	</script>
+</body>

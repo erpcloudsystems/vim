@@ -1,0 +1,53 @@
+{
+ "actions": [],
+ "creation": "2021-07-30 08:42:43.320536",
+ "doctype": "DocType",
+ "editable_grid": 1,
+ "engine": "InnoDB",
+ "field_order": [
+  "slot_name",
+  "start_time",
+  "end_time",
+  "uom"
+ ],
+ "fields": [
+  {
+   "fieldname": "slot_name",
+   "fieldtype": "Data",
+   "in_list_view": 1,
+   "label": "Slot Name",
+   "reqd": 1
+  },
+  {
+   "fieldname": "start_time",
+   "fieldtype": "Time",
+   "in_list_view": 1,
+   "label": "Start Time"
+  },
+  {
+   "fieldname": "end_time",
+   "fieldtype": "Time",
+   "in_list_view": 1,
+   "label": "End Time"
+  },
+  {
+   "fieldname": "uom",
+   "fieldtype": "Link",
+   "in_list_view": 1,
+   "label": "UoM",
+   "options": "UOM"
+  }
+ ],
+ "index_web_pages_for_search": 1,
+ "istable": 1,
+ "links": [],
+ "modified": "2023-01-12 13:58:24.633375",
+ "modified_by": "Administrator",
+ "module": "VIM",
+ "name": "Slot List",
+ "owner": "Administrator",
+ "permissions": [],
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "track_changes": 1
+}

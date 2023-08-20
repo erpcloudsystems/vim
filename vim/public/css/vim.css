@@ -1,0 +1,9 @@
+#page-point-of-sale .container {
+   max-width:unset;     
+}
+
+/* Hide HR & Payroll Menu (Side menu)  modifeied as, it was affecting all over site eg. breadcrumb*/
+/* .standard-sidebarfafds-section  */
+.desk-sidebar-item[href="/app/hr"], .desk-sidebar-item[href="/app/payroll"] {
+    display: none !important;
+}

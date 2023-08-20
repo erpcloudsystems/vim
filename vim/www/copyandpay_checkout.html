@@ -1,0 +1,146 @@
+{% extends "templates/web.html" %}
+
+{% block title %} Payment {% endblock %}
+
+{%- block header -%}{% endblock %}
+
+{% block script %}
+
+
+<script>
+	    
+$(document).ready(function(){
+	(function(e){
+		var options = {			
+			"amount": cint("{{ amount }}" * 100), // 2000 paise = INR 20
+			"name": "{{ title }}",
+			"description": "{{ description }}",
+			"subscription_id": "{{ subscription_id }}",			
+			"prefill": {
+				"name": "{{ payer_name }}",
+				"email": "{{ payer_email }}",
+				"order_id": "{{ order_id }}"
+			}
+		};
+
+		// var rzp = new CopyandPay(options);
+		// rzp.open();
+		//e.preventDefault();
+	})();
+	//make_payment_log(options, "{{ reference_doctype }}", "{{ reference_docname }}", "{{ token }}","{{ checkout }}");
+})
+
+	
+
+
+
+
+// 		var options = {
+// 			"key": "{{ api_key }}",
+// 			"amount": cint("{{ amount }}" * 100), // 2000 paise = INR 20
+// 			"name": "{{ title }}",
+// 			"description": "{{ description }}",
+// 			"subscription_id": "{{ subscription_id }}"			
+// 		};
+
+// 		make_payment_log(options, "{{ reference_doctype }}", "{{ reference_docname }}", "{{ token }}","{{ checkout }}");
+// })
+
+
+frappe.provide('copyandpay');
+
+make_payment_log = function(response, options, doctype, docname, token,checkout){
+	$('.copyandpay-loading').addClass('hidden');
+	$('.copyandpay-confirming').removeClass('hidden');
+    
+    console.log(make_payment_log,"make_payment_log")
+	frappe.call({
+		method:"vim.custom_script/copyandpay/copyandpay_checkout.make_payment",
+		freeze:true,
+		headers: {"X-Requested-With": "XMLHttpRequest"},
+		args: {
+			"copyandpay_payment_id": response.copyandpay_payment_id,
+			"options": options,
+			"reference_doctype": doctype,
+			"reference_docname": docname,
+			"token": token,
+            "checkoutid":checkout
+		},
+		callback: function(r){
+			if (r.message && r.message.status == 200) {
+				window.location.href = r.message.redirect_to
+			}
+			else if (r.message && ([401,400,500].indexOf(r.message.status) > -1)) {
+				window.location.href = r.message.redirect_to
+			}
+		}
+	})
+}
+
+function make_payment_log(options, doctype, docname, token,checkout){
+	$('.copyandpay-loading').addClass('hidden');
+	$('.copyandpay-confirming').removeClass('hidden');
+    
+	frappe.call({
+            method: "vim.vim.doctype.copyandpay_payment.copyandpay_payment.payment_request",
+            args:{"checkout_id":checkout},
+            callback: function (r, rt) {
+               
+                if(r && r.message){
+                    console.log(r.message.id,"message",r.message)
+					frappe.call({
+							method:"vim.custom_script.copyandpay.copyandpay_checkout.make_payment",
+							freeze:true,
+							headers: {"X-Requested-With": "XMLHttpRequest"},
+							args: {
+			
+								"options": options,
+								"reference_doctype": doctype,
+								"reference_docname": docname,
+								"token": token,
+           						 "checkoutid":checkout
+							},
+							callback: function(r){
+								if (r.message && r.message.status == 200) {
+									window.location.href = r.message.redirect_to
+								}
+								else if (r.message && ([401,400,500].indexOf(r.message.status) > -1)) {
+							window.location.href = r.message.redirect_to
+			}
+		}
+	})
+                    
+                }
+            }
+        });
+
+}
+
+	
+</script>
+<script src="https://eu-test.oppwa.com/v1/paymentWidgets.js?checkoutId={{checkout}}"></script>
+<form action="./copyandpay_payment?token={{token}}&entityId={{entityId}}" class="paymentWidgets" data-brands="VISA MASTER AMEX"></form>
+ <!-- <form action="http://vimdev.etoserp.com/orders/" class="paymentWidgets" data-brands="VISA MASTER AMEX"></form> -->
+
+
+
+{% endblock %}
+
+{%- block page_content -%}
+
+<p class='lead text-center centered'>
+	<span class='copyandpay-loading'>Loading Payment System</span>
+	<span class='copyandpay-confirming hidden'>Confirming Payment</span>
+</p>
+
+{% endblock %}
+
+{% block style %}
+<style>
+	header, footer {
+		display: none;
+	}
+
+</style>
+{% endblock %}
+

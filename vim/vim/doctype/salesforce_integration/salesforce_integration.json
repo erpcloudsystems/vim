@@ -1,0 +1,109 @@
+{
+ "actions": [],
+ "creation": "2022-02-28 12:25:34.183963",
+ "doctype": "DocType",
+ "editable_grid": 1,
+ "engine": "InnoDB",
+ "field_order": [
+  "salesforce_push_api_settings_section",
+  "base_url",
+  "username",
+  "password",
+  "client_id",
+  "client_secret",
+  "column_break_7",
+  "pause_sync_process",
+  "batch_settings_section",
+  "customer_batch_count",
+  "order_batch_count"
+ ],
+ "fields": [
+  {
+   "fieldname": "base_url",
+   "fieldtype": "Data",
+   "in_list_view": 1,
+   "label": "Base Url",
+   "reqd": 1
+  },
+  {
+   "fieldname": "username",
+   "fieldtype": "Data",
+   "in_list_view": 1,
+   "label": "Username",
+   "reqd": 1
+  },
+  {
+   "fieldname": "password",
+   "fieldtype": "Data",
+   "in_list_view": 1,
+   "label": "Password",
+   "reqd": 1
+  },
+  {
+   "fieldname": "client_id",
+   "fieldtype": "Data",
+   "in_list_view": 1,
+   "label": "Client ID",
+   "reqd": 1
+  },
+  {
+   "fieldname": "client_secret",
+   "fieldtype": "Data",
+   "label": "Client Secret",
+   "reqd": 1
+  },
+  {
+   "fieldname": "salesforce_push_api_settings_section",
+   "fieldtype": "Section Break",
+   "label": "Salesforce Push API Settings"
+  },
+  {
+   "fieldname": "batch_settings_section",
+   "fieldtype": "Section Break",
+   "label": "Batch Settings"
+  },
+  {
+   "fieldname": "customer_batch_count",
+   "fieldtype": "Int",
+   "label": "Customer Batch Count"
+  },
+  {
+   "fieldname": "order_batch_count",
+   "fieldtype": "Int",
+   "label": "Order Batch Count"
+  },
+  {
+   "fieldname": "column_break_7",
+   "fieldtype": "Column Break"
+  },
+  {
+   "default": "False",
+   "fieldname": "pause_sync_process",
+   "fieldtype": "Check",
+   "label": "Pause Sync Process"
+  }
+ ],
+ "index_web_pages_for_search": 1,
+ "issingle": 1,
+ "links": [],
+ "modified": "2022-06-24 21:00:39.117296",
+ "modified_by": "Administrator",
+ "module": "VIM",
+ "name": "Salesforce Integration",
+ "owner": "Administrator",
+ "permissions": [
+  {
+   "create": 1,
+   "delete": 1,
+   "email": 1,
+   "print": 1,
+   "read": 1,
+   "role": "System Manager",
+   "share": 1,
+   "write": 1
+  }
+ ],
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "track_changes": 1
+}

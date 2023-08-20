@@ -1,0 +1,34 @@
+{
+ "attach_print": 1,
+ "channel": "Email",
+ "condition": "doc.is_approved==0 and doc.status==\"Draft\" and doc.discount_approval_required==1\n",
+ "creation": "2021-09-17 19:06:10.266408",
+ "days_in_advance": 0,
+ "docstatus": 0,
+ "doctype": "Notification",
+ "document_type": "POS Invoice",
+ "enabled": 0,
+ "event": "Save",
+ "idx": 0,
+ "is_standard": 1,
+ "message": "<h3>POS Invoice Discount Approval</h3>\n\n<p>Transaction {{ doc.name }} need to approve. Please take necessary action.</p>\n",
+ "method": "validate",
+ "modified": "2021-10-06 12:01:26.992136",
+ "modified_by": "Administrator",
+ "module": "VIM",
+ "name": "Discount Approval",
+ "owner": "Administrator",
+ "property_value": "",
+ "recipients": [
+  {
+   "receiver_by_document_field": "contact_email",
+   "receiver_by_role": "Sales Manager"
+  }
+ ],
+ "send_system_notification": 1,
+ "send_to_all_assignees": 0,
+ "sender": "Surajn",
+ "sender_email": "surajn@avu.net.in",
+ "set_property_after_alert": "",
+ "subject": "Discount Approval: {{ doc.name }}"
+}

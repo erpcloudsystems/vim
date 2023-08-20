@@ -1,0 +1,59 @@
+{
+ "actions": [],
+ "creation": "2022-08-20 13:28:58.093044",
+ "doctype": "DocType",
+ "editable_grid": 1,
+ "engine": "InnoDB",
+ "field_order": [
+  "closing_entry",
+  "grand_total",
+  "column_break_3",
+  "net_total",
+  "change_amount",
+  "is_updated"
+ ],
+ "fields": [
+  {
+   "fieldname": "closing_entry",
+   "fieldtype": "Data",
+   "label": "Closing Entry"
+  },
+  {
+   "fieldname": "grand_total",
+   "fieldtype": "Currency",
+   "label": "Grand Total"
+  },
+  {
+   "fieldname": "column_break_3",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "net_total",
+   "fieldtype": "Currency",
+   "label": "Net Total"
+  },
+  {
+   "fieldname": "change_amount",
+   "fieldtype": "Currency",
+   "label": "Change Amount"
+  },
+  {
+   "default": "0",
+   "fieldname": "is_updated",
+   "fieldtype": "Check",
+   "label": "Is Updated"
+  }
+ ],
+ "index_web_pages_for_search": 1,
+ "istable": 1,
+ "links": [],
+ "modified": "2022-08-20 13:28:58.093044",
+ "modified_by": "Administrator",
+ "module": "VIM",
+ "name": "UPDATE POS CLOSING ENTRY Child",
+ "owner": "Administrator",
+ "permissions": [],
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "track_changes": 1
+}

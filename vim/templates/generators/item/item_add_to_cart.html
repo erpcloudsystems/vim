@@ -1,0 +1,1132 @@
+{% if shopping_cart and shopping_cart.cart_settings.enabled %}
+
+{% set cart_settings = shopping_cart.cart_settings %}
+{% set product_info = shopping_cart.product_info %}
+<style>
+	/* {box-sizing: border-box;} */
+
+/* Button used to open the contact form - fixed at the bottom of the page */
+.open-button {
+  background-color: #555;
+  color: white;
+  padding: 16px 20px;
+  border: none;
+  cursor: pointer;
+  opacity: 0.8;
+  position: fixed;
+  bottom: 23px;
+  right: 28px;
+  width: 280px;
+}
+
+/* The popup form - hidden by default */
+.form-popup {
+  display: none;
+  position: fixed;
+  bottom: 0;
+  right: 13%;
+  border: 3px solid #f1f1f1;
+  z-index: 9;
+  min-width:1024px;
+  width: 60%;
+  top:10px;
+  height: 600px;
+  background:white;
+}
+
+#calendar{
+	max-height: 500px;
+}
+/* Add styles to the form container */
+/* .form-container {
+  min-width: 500px;
+  padding: 10px;
+  background-color: white;
+}
+ */
+
+
+/* Add a red background color to the cancel button */
+/* .form-container .cancel {
+  background-color: red;
+} */
+
+/* Add some hover effects to buttons */
+/* .form-container .btn:hover, .open-button:hover {
+  opacity: 1;
+} */
+
+/* .fc-daygrid-event{ */
+	/* display: flex; */
+    /* background-color: #d3e9fc;
+    color: #1366ae;
+} */
+.free-slot{
+	display: flex;
+ 	background-color: #a4e5a4;
+    /* color: green; */
+	cursor: pointer;
+}
+.booked-slot{ 
+	display: flex;
+    /* background-color: #d3e9fc; */
+    background-color: #f4f5f6;
+	pointer-events: none;
+    color: #1366ae;
+} 
+.form-group .clearfix{
+	display:none !important;
+}
+
+#overlay {
+  position: fixed; /* Sit on top of the page content */
+  display: none; /* Hidden by default */
+  width: 100%; /* Full width (cover the whole page) */
+  height: 100%; /* Full height (cover the whole page) */
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0,0,0,0.5); /* Black background with opacity */
+  z-index: 2; /* Specify a stack order in case you're using a different order for other elements */
+  cursor: pointer; /* Add a pointer on hover */
+}
+.noscroll{
+	overflow: hidden;
+} 
+.custom-calendar{
+box-shadow: none !important;
+margin-bottom: 15px;
+font-size: var(--text-base);}
+
+
+/*the container must be positioned relative:*/
+.autocomplete {
+  position: relative;
+  display: inline-block;
+  width: 100%;
+    height: 30px;
+    font-size: 18px;
+    /* padding: 10px; */
+}
+
+input {
+  border: 1px solid transparent;
+  background-color: #f1f1f1;
+  padding: 10px;
+  font-size: 16px;
+}
+
+input[type=text] {
+  background-color: #f1f1f1;
+  width: 100%;
+}
+
+input[type=submit] {
+  background-color: DodgerBlue;
+  color: #fff;
+  cursor: pointer;
+}
+
+.autocomplete-items {
+  position: absolute;
+  border: 1px solid #d4d4d4;
+  border-bottom: none;
+  border-top: none;
+  z-index: 99;
+  /*position the autocomplete items to be the same width as the container:*/
+  max-height: 300px;
+  overflow-y: scroll;
+  top: 100%;
+  left: 0;
+  right: 0;
+}
+
+.autocomplete-items div {
+  padding: 10px;
+  cursor: pointer;
+  background-color: #fff; 
+  border-bottom: 1px solid #d4d4d4; 
+}
+
+/*when hovering an item:*/
+.autocomplete-items div:hover {
+  background-color: #e9e9e9; 
+}
+
+/*when navigating through the items using the arrow keys:*/
+.autocomplete-active {
+  background-color: DodgerBlue !important; 
+  color: #ffffff; 
+}
+
+
+</style>
+<div class="item-cart row mt-2" data-variant-item-code="{{ item_code }}">
+	<div class="col-md-12">
+       
+		{% if cart_settings.show_price and product_info.price %}
+		<div class="product-price" id = "uom_price">
+			<span id = "uom_price">{{ product_info.price.formatted_price }} </span>/<span id = "uom"> {{ product_info.uom }}</span>
+			<!-- {{ product_info.price.formatted_price_sales_uom }} -->
+			<!-- <small class="formatted-price">({{ product_info.price.formatted_price }} / {{ product_info.uom }})</small> -->
+		</div>
+		{% else %}
+			{{ _("UOM") }} : {{ product_info.uom }}
+		{% endif %}
+
+		{% if cart_settings.show_stock_availability %}
+		<div>
+			{% if product_info.in_stock == 0 %}
+			<span class="text-danger no-stock">
+				{{ _('Not in stock') }}
+			</span>
+			{% elif product_info.in_stock == 1 %}
+			<span class="text-success has-stock">
+				{{ _('In stock') }}
+				{% if product_info.show_stock_qty and product_info.stock_qty %}
+					({{ product_info.stock_qty[0][0] }})
+				{% endif %}
+			</span>
+			{% endif %}
+		</div>
+		{% endif %}
+	
+
+		<div class="mt-5 mb-5">
+	
+		{% if product_info.price and (cart_settings.allow_items_not_in_stock or product_info.in_stock) %}
+			{%- set maximum_qty = frappe.db.get_value('Item', item_code, 'maximum_sales_quantity') %}
+			{%- set min_qty = frappe.db.get_value('Item', item_code, 'minimum_sales_quantity') %}
+			<div class="input-group number-spinner" style="width: 50%;	padding: 0px 10px 10px 0px;">
+				<span class="input-group-prepend d-none d-sm-inline-block">
+					<button class="btn cart-btn" data-dir="dwn">–</button>
+				</span>
+				<input class="form-control text-center cart-qty" value = "{{min_qty}}" data-item-code="{{ item_code }}" min-val= "{{min_qty}}" max-val= "{{maximum_qty}}" non-sharable = "{{doc.non_sharable_slot}}">
+				<span class="input-group-append d-none d-sm-inline-block">
+					<button class="btn cart-btn" data-dir="up">+</button>
+				</span>
+			</div>
+			{% if doc.non_sharable_slot or doc.non_sharable_slot == 1  %}
+
+					<div >
+					<!-- <div class="visit-date">
+						<input type="date" id="visit-date" name="visitdate" style="margin: 5px;" onchange="datehandler(event);">
+					</div> -->
+					<!-- <div class="slot-field"></div> -->
+					<!-- <div class="brand-field" id="brand-field" ></div> -->
+					<!-- <td class="text-right"> -->
+					<!-- </td> -->
+					<div class="branch-field" id="branch-field"></div>
+					<!-- <div class="date-field" id="date-field"></div> -->
+					<div class = "form-group">
+					<span>Visit Date :</span>	<input type="date" id="visit-date" name="visitdate" style="margin: 5px;" onchange="datehandler(event);">
+					</div >
+
+					<div class="unit-field hidden" id="unit-field"></div>
+					<div class = "hidden" style=" background-color: #c8e5ff; text-align:center;  padding: 5px; margin-bottom: 10px;  font-size: var(--text-base);" id="no_slot" > No slot Available for selected date</div>
+
+					<div class="slot-field hidden" id="slot-field"></div>
+					<!-- <div class = "row" style = "margin-left: 40%;">	<button class = "custom-calendar btn btn-primary hidden" >Select Slot</button></div> -->
+					<!-- <button class = "custom-calendar btn btn-primary hidden w-100">Select Slot</button> -->
+					<!-- <div class= "selected_slot hidden"  style = "padding-top: 10px; padding-bottom: 10px;"> -->
+					<!-- <div class="row col-md-12" ><div class ="col-2"></div><div class ="col-8" style="text-align: center;">Slot</div><div class ="col-2"></div></div> -->
+				
+					<div class = "hidden" style=" background-color: #c8e5ff; text-align:center;  padding: 5px; margin-bottom: 10px;  font-size: var(--text-base);" id="Slot" ></div>
+					<!-- <div class="row col-md-12" style = "padding-top: 5px;"><div class ="col-6">Selected Slot Date : </div><div class ="col-6"    style=" background-color: #c8e5ff;"><Label id="Slot_date"></Label></div></div> -->
+					</div>
+					{% else %}
+				<div class= 'product-code' id = "valid_ticket"></div>
+					{% endif %}
+					<div class="phone-field hidden" id ="phone-field">
+						  <div class="autocomplete">
+							<input type="text" placeholder="Customer Phone Number" id ="input_search" >
+							<!-- <ul id = "phone_select">
+								
+							</ul> -->
+						</div>
+					</div>
+					<br><br>
+					<div class = "hidden" style=" background-color: #c8e5ff; text-align:center;  padding: 5px; margin-bottom: 10px;   font-size: var(--text-base);" id="customer" ></div>
+
+				<a href="/cart"
+					class="btn btn-light btn-view-in-cart {% if not product_info.qty %}hidden{% endif %}"
+					role="button"
+				>
+					{{ _("View in Cart") }}
+				</a>
+				<button
+					data-item-code="{{item_code}}"
+					class="btn btn-primary btn-add-to-cart {% if product_info.qty or non_sharable_slot %}hidden{% endif %} w-100"
+				>
+					<span class="mr-2">
+						<svg class="icon icon-md">
+							<use href="#icon-assets"></use>
+						</svg>
+					</span>
+					{{ _("Add to Cart") }}
+				</button>
+			{% endif %}
+			{% if cart_settings.show_contact_us_button %}
+				{% include "templates/generators/item/item_inquiry.html" %}
+			{% endif %}
+
+		</div>
+
+	</div>
+</div>
+<div id="overlay"></div>
+<div class="form-popup" id="myForm">
+	 <div><button type="submit" class="btn cancel" style="float: right;    margin: 7px;" onclick="closeForm()">Close</button></div>
+	<div class = "col-sm-12" id ="calendar"></div>
+</div>
+<script type="text/javascript" src="/assets/frappe/js/lib/jquery/jquery.min.js"></script>
+<!-- <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script> -->
+<!-- <script src="http://code.jquery.com/ui/1.10.3/jquery-ui.js" type="text/javascript"></script> -->
+
+	<!-- <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/selectize.js/0.12.6/js/standalone/selectize.min.js" integrity="sha256-+C0A5Ilqmu4QcSPxrlGpaZxJ04VjsRjKu+G82kl5UJk=" crossorigin="anonymous"></script>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/selectize.js/0.12.6/css/selectize.bootstrap3.min.css" integrity="sha256-ze/OEYGcFbPRmvCnrSeKbRTtjG4vGLHXgOqsyLFTRjg=" crossorigin="anonymous" /> -->
+<!-- <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/fullcalendar@5.9.0/main.min.css"> -->
+
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.22.2/moment.min.js"></script>
+<!-- <script src="https://cdn.jsdelivr.net/npm/fullcalendar@5.9.0/main.js"></script> -->
+<!-- <script type="application/json" src="https://cdn.jsdelivr.net/npm/fullcalendar@5.9.0/package.json"></script> -->
+<script>
+	// var jq14 = jQuery.noConflict(true); 
+
+	// (function ($) {
+	// 	$(document).ready(function () {
+	// 			$("#select-state").selectize({
+	// 				placeholder: "Search...",
+	// 				allowClear: true
+	// 			});
+	// 	});
+	// }(jq14));
+</script>
+<script>
+	var slot ="";
+	var date = "";
+	var brand = "";
+	var branch = "";
+	var phone = "";
+	var additional_note = "";
+    var internal_user = false;
+	var unit ="";
+	var quantity = 1;
+    function autocomplete(inp, arr) {
+  /*the autocomplete function takes two arguments,
+  the text field element and an array of possible autocompleted values:*/
+  var currentFocus;
+  /*execute a function when someone writes in the text field:*/
+  inp.addEventListener("input", function(e) {
+      var a, b, i, val = this.value;
+      /*close any already open lists of autocompleted values*/
+      closeAllLists();
+      if (!val) { return false;}
+      currentFocus = -1;
+      /*create a DIV element that will contain the items (values):*/
+      a = document.createElement("DIV");
+      a.setAttribute("id", this.id + "autocomplete-list");
+      a.setAttribute("class", "autocomplete-items");
+      /*append the DIV element as a child of the autocomplete container:*/
+      this.parentNode.appendChild(a);
+      /*for each item in the array...*/
+      for (i = 0; i < arr.length; i++) {
+        /*check if the item starts with the same letters as the text field value:*/
+        if (arr[i].substr(0, val.length).toUpperCase() == val.toUpperCase()) {
+          /*create a DIV element for each matching element:*/
+          b = document.createElement("DIV");
+          /*make the matching letters bold:*/
+          b.innerHTML = "<strong>" + arr[i].substr(0, val.length) + "</strong>";
+          b.innerHTML += arr[i].substr(val.length);
+          /*insert a input field that will hold the current array item's value:*/
+          b.innerHTML += "<input type='hidden' value='" + arr[i] + "'>";
+          /*execute a function when someone clicks on the item value (DIV element):*/
+          b.addEventListener("click", function(e) {
+              /*insert the value for the autocomplete text field:*/
+              inp.value = this.getElementsByTagName("input")[0].value;
+              onSelect(inp.value)
+              /*close the list of autocompleted values,
+              (or any other open lists of autocompleted values:*/
+              closeAllLists();
+          });
+          a.appendChild(b);
+        }
+      }
+  });
+  /*execute a function presses a key on the keyboard:*/
+  inp.addEventListener("keydown", function(e) {
+      var x = document.getElementById(this.id + "autocomplete-list");
+      if (x) x = x.getElementsByTagName("div");
+      if (e.keyCode == 40) {
+        /*If the arrow DOWN key is pressed,
+        increase the currentFocus variable:*/
+        currentFocus++;
+        /*and and make the current item more visible:*/
+        addActive(x);
+      } else if (e.keyCode == 38) { //up
+        /*If the arrow UP key is pressed,
+        decrease the currentFocus variable:*/
+        currentFocus--;
+        /*and and make the current item more visible:*/
+        addActive(x);
+      } else if (e.keyCode == 13) {
+        /*If the ENTER key is pressed, prevent the form from being submitted,*/
+        e.preventDefault();
+        if (currentFocus > -1) {
+          /*and simulate a click on the "active" item:*/
+          if (x) x[currentFocus].click();
+        }
+      }
+  });
+  function addActive(x) {
+    /*a function to classify an item as "active":*/
+    if (!x) return false;
+    /*start by removing the "active" class on all items:*/
+    removeActive(x);
+    if (currentFocus >= x.length) currentFocus = 0;
+    if (currentFocus < 0) currentFocus = (x.length - 1);
+    /*add class "autocomplete-active":*/
+    x[currentFocus].classList.add("autocomplete-active");
+  }
+  function removeActive(x) {
+    /*a function to remove the "active" class from all autocomplete items:*/
+    for (var i = 0; i < x.length; i++) {
+      x[i].classList.remove("autocomplete-active");
+    }
+  }
+  function closeAllLists(elmnt) {
+    /*close all autocomplete lists in the document,
+    except the one passed as an argument:*/
+    var x = document.getElementsByClassName("autocomplete-items");
+    for (var i = 0; i < x.length; i++) {
+      if (elmnt != x[i] && elmnt != inp) {
+        x[i].parentNode.removeChild(x[i]);
+      }
+    }
+  }
+  /*execute a function when someone clicks in the document:*/
+  document.addEventListener("click", function (e) {
+      closeAllLists(e.target);
+  });
+}
+
+// Select Search field
+function onSelect(val) {
+	if(val != "")
+	{var non_sharable = false;		
+		if	(document.getElementById('branch-field'))
+		 non_sharable = true;
+	phone=val;
+                     frappe.call({
+				"method": "vim.api.get_customer",
+				async: true,
+				args:{phone:phone?phone:''},
+				callback: function (r) {
+                    $('#customer').removeClass('hidden');
+
+                    document.getElementById('customer').innerHTML= "Customer : " +r.message;
+					// return slotlist;
+			            	}
+		        	});
+	
+					// calendar_render();
+					if(((!non_sharable || non_sharable == 0)|| (brand != "" && branch != "")) &&( !internal_user || (internal_user && phone != "")))
+						{$('.custom-calendar').removeClass('hidden');
+						$('.btn-add-to-cart').removeClass('hidden');
+						}
+					else
+					{$('.custom-calendar').addClass('hidden');
+					$('.selected_slot').addClass('hidden');
+					$('.btn-add-to-cart').addClass('hidden');
+
+						}}
+						
+		else {
+			container = $(this).closest(".searchable");
+			phone="";
+			container.find("input").val(container.find("ul li.selected").text()).blur();
+			$('#customer').addClass('hidden');
+			document.getElementById("input_search").value = "";
+		}
+}
+
+
+	function openForm() {
+ 		 document.getElementById("myForm").style.display = "block";
+		  document.getElementById("overlay").style.display = "block";
+		  $('body').addClass('noscroll'); 
+		}
+
+	function closeForm() {
+		document.getElementById("myForm").style.display = "none";
+		document.getElementById("overlay").style.display = "none";
+		$('body').removeClass('noscroll'); 
+
+		}
+		function datehandler(e){
+			date = e.target.value;
+			$('.unit-field').removeClass('hidden');
+			check_available();
+			}
+			function check_available(){
+				frappe.call({
+				"method": "vim.api.check_available",
+				async: true,
+				args:{item_code:item_code?item_code:'',visit_date:date?date:null
+				
+				,branch:branch?branch:null},
+				callback: function (r) {
+									
+				
+				}})
+			}
+	function getslotLists(select_event,delivery_date,unit){
+        var resultlist=[];var slotlist=[];
+		var slot_df = this.slot_field;
+		frappe.call({
+				"method": "vim.api.vim_get_slot_list",
+				async: true,
+				args:{item_code:select_event?select_event:'',visit_date:delivery_date?delivery_date:'',branch:branch?branch:null,unit:unit?unit:null},
+				callback: function (r) {
+									
+					
+					resultlist = (r.message || []);
+					
+					Object.entries(resultlist).forEach(([key, value]) => {
+						var item = "";
+						item=(value["Name"]);
+						slotlist.push(item);
+					});
+					$('#Slot').addClass('hidden');
+					$('.btn-add-to-cart').addClass('hidden');	
+					if (slotlist.length < 1)
+					{
+					$('#no_slot').removeClass('hidden');
+					$('.slot-field').addClass('hidden');
+					}
+					else
+					{// console.log(r,slotlist);
+					//$(`.slot-field`).set_df_property()
+					$('.slot-field').removeClass('hidden');
+					$('#no_slot').addClass('hidden');
+					window.slot_field.df.options = slotlist;
+            		window.slot_field.refresh();}
+					
+	
+					return slotlist;
+				}})
+	}
+
+
+
+	function getslotDetails(select_event,delivery_date){
+        var resultlist=[];var slotlist=[];
+		// console.log(this.slot_field.df);
+		var slot_df = this.slot_field;
+		frappe.call({
+				"method": "vim.custom_script.point_of_sale.point_of_sale.get_slot_list",
+				async: true,
+				args:{item_name:select_event?select_event:'',is_new:0,delivery_date:delivery_date?delivery_date:''},
+				callback: function (r) {
+									
+					
+					resultlist = (r.message['result_list'] || []);
+					
+					Object.entries(resultlist).forEach(([key, value]) => {
+						var item = "";
+						item=(value["slot_name"]);
+						slotlist.push(item);
+					});
+					// console.log(r,slotlist);
+					//$(`.slot-field`).set_df_property()
+					window.slot_field.df.options = slotlist;
+            		window.slot_field.refresh();
+	
+					return slotlist;
+				}})
+	}
+	$(document).ready(function () {
+		// var jq14 = jQuery.noConflict(true); 
+
+		// 	(function ($) {
+		// 		$(document).ready(function () {
+						// $("#select-state").selectize({
+						// 	placeholder: "Search...",
+						// 	allowClear: true
+						// });
+		// 		});
+		// 	}(jq14));
+	// 	$('#phone-field select').selectize({
+    //       sortField: 'text'
+    //   });
+	// $('select').selectize({
+    //       sortField: 'text'
+    //   });
+	//   var t = "<select style= 'width:100px; color:blue;' id = 'test'><option>A</option><option>B</option></select>";
+	//   var container = document.getElementById("phone-field");
+	//   $('#phone-field select').append(t);
+	//   container.appendChild(document.createElement("select"))
+  });
+	frappe.ready(() => {
+	// 		$('select').selectize({
+    //       sortField: 'text'
+    //   });
+		$('.page_content').on('click', '.btn-add-to-cart', (e) => {
+			const $btn = $(e.currentTarget);
+			$btn.prop('disabled', true);
+			const item_code = $btn.data('item-code');
+			check_available();
+			erpnext.shopping_cart.update_cart({
+				item_code,
+				qty: quantity,
+				additional_notes: additional_note,
+				slot:""+slot,
+				delivery_date: date,
+				brand: brand,
+				branch: branch,
+				phone: phone,
+				uom: unit,
+
+				callback(r) {
+					$btn.prop('disabled', false);
+					if (r.message) {
+						// console.log(r.message);
+						$('.btn-add-to-cart, .btn-view-in-cart').toggleClass('hidden');
+					}
+				}
+			});
+		});
+		var options = [];
+		quantity = 	$('.number-spinner input').val();
+		$(".page_content").on('click', '.number-spinner button', function () {
+			var btn = $(this),
+				input = btn.closest('.number-spinner').find('input'),
+				oldValue = input.val().trim(),
+				newVal = 0,
+				max = parseInt(input.attr("max-val")),
+				min = parseInt(input.attr("min-val"))
+				non_sharable = input.attr("non-sharable");
+			if (btn.attr('data-dir') == 'up') {
+				if(max > oldValue || non_sharable == 0)
+				newVal = parseInt(oldValue) + 1;
+				else newVal = parseInt(oldValue);
+			} else {
+				if(min < oldValue)
+				{if (oldValue > 2) {
+					newVal = parseInt(oldValue) - 1;
+				}}
+				else newVal = parseInt(oldValue);
+			}
+			input.val(newVal);
+			quantity = newVal;
+			// return false;
+		});
+
+		$(".page_content").on('change', '.number-spinner input', function () {
+			var min = parseInt($(this).attr('min-val'));
+			var max = parseInt($(this).attr('max-val'));
+			oldValue = $(this).val();
+			if(oldValue % 1 !=0)
+			{$(this).val(parseInt(oldValue));
+				alert("Quntity should be whole number");
+			}
+			if($(this).val() < min){
+				$(this).val(min);
+				alert("Minimum Quantity can be "+ min);
+			}
+			if($(this).val() > max){
+				$(this).val(max);
+				alert("Maximum Quantity can be "+ max);
+			}
+			quantity = $(this).val();
+
+		});
+		frappe.call({
+				"method": "vim.api.check_login",
+				async: true,
+				callback: function (r) {
+					// return slotlist;
+				}
+			});
+
+			const item_code =	$('.btn-add-to-cart').data('item-code');		
+			
+					frappe.call({
+				"method": "vim.api.get_validity",
+				"args":{"item_code":item_code},
+				async: true,
+				callback: function (r) {
+					// var if_zero=r.message.if_zero
+					var if_zero=0
+					// return slotlist;
+					console.log(r);
+					if(if_zero !==0){
+					document.getElementById('valid_ticket').innerHTML='<b>	This has validity period from: '+r.message["valid_from"] + ' to '+r.message["valid_to"]+ ' (The coupon may be used multiple times until the quantity is finished or the period ends) <b>'
+				}
+				}
+			});
+
+	// if	(document.getElementById('brand-field'))
+	// 	this.brand_field = frappe.ui.form.make_control({
+	// 		df: {
+				
+	// 			fieldtype: 'Select',
+	// 			options:[],
+    //            // get_query: () => querys,
+	// 			placeholder: __("Brand"),
+    //             onchange:function(){
+    //                  brand=this.value;
+
+	// 				// calendar_render();
+	// 				if( brand != "" && branch != ""  &&( !internal_user || (internal_user && phone != "")))
+	// 					{$('.custom-calendar').removeClass('hidden');
+	// 					}
+	// 				else
+	// 				{$('.custom-calendar').addClass('hidden');
+	// 				$('.selected_slot').addClass('hidden');
+	// 					}
+					
+	// 			frappe.call({
+	// 			"method": "vim.api.get_branch_list",
+	// 			async: true,
+	// 			args:{brand:brand},
+	// 			// args:{item_name:select_event?select_event:'',is_new:0,delivery_date:delivery_date?delivery_date:''},
+	// 			callback: function (r) {
+	// 				branch = "";			
+	// 				branchlist = (r.message['branch_list'] || []);						
+	// 				window.branch_field.df.options = branchlist;
+    //         		window.branch_field.refresh();
+	// 				if( brand != "" && branch != ""  &&( !internal_user || (internal_user && phone != "")))
+	// 					{$('.custom-calendar').removeClass('hidden');
+	// 					}
+	// 				else
+	// 				{$('.custom-calendar').addClass('hidden');
+	// 				$('.selected_slot').addClass('hidden');
+	// 					}
+	// 				// return slotlist;
+	// 			}
+	// 		});
+				
+
+    //             },
+				
+	// 		},
+	// 		parent: $('.brand-field'),
+	// 		render_input: true,
+	// 	});
+		if	(document.getElementById('phone-field')){
+		var non_sharable = false;		
+		if	(document.getElementById('branch-field'))
+		 non_sharable = true;
+        // this.phone_field = frappe.ui.form.make_control({
+		// 	df: {
+				
+		// 		fieldtype: 'Select',
+		// 		hidden : true,
+		// 		options:[],
+        //        // get_query: () => querys,
+		// 		placeholder: __("Customer Phone Number"),
+        //         onchange:function(){
+        //         phone=this.value;
+        //              frappe.call({
+		// 		"method": "vim.api.get_customer",
+		// 		async: true,
+		// 		args:{phone:phone?phone:''},
+		// 		callback: function (r) {
+        //             $('#customer').removeClass('hidden');
+
+        //             document.getElementById('customer').innerHTML= "Customer : " +r.message;
+		// 			// return slotlist;
+		// 	            	}
+		//         	});
+	
+		// 			// calendar_render();
+		// 			if(((!non_sharable || non_sharable == 0)|| (brand != "" && branch != "")) &&( !internal_user || (internal_user && phone != "")))
+		// 				{$('.custom-calendar').removeClass('hidden');
+		// 				$('.btn-add-to-cart').removeClass('hidden');
+		// 				}
+		// 			else
+		// 			{$('.custom-calendar').addClass('hidden');
+		// 			$('.selected_slot').addClass('hidden');
+		// 			$('.btn-add-to-cart').addClass('hidden');
+
+		// 				}
+        //         },
+				
+		// 	},
+		// 	parent: $('.phone-field'),
+		// 	render_input: true,
+		// });
+	}
+		if	(document.getElementById('branch-field'))
+		this.branch_field = frappe.ui.form.make_control({
+			df: {
+				
+				fieldtype: 'Select',
+				options:[],
+               // get_query: () => querys,
+				placeholder: __("Branch"),
+                onchange:function(){
+                     branch=this.value;
+					 check_available();
+					if( brand != "" && branch != ""  &&( !internal_user || (internal_user && phone != "")))
+						{$('.custom-calendar').removeClass('hidden');
+						// $('.selected_slot').removeClass('hidden');
+						$('.btn-add-to-cart').removeClass('hidden');
+						}
+					else
+					{$('.custom-calendar').addClass('hidden');
+					$('.selected_slot').addClass('hidden');
+					$('.btn-add-to-cart').addClass('hidden');
+						}
+                },
+				
+			},
+			parent: $('.branch-field'),
+			render_input: true,
+		});
+
+		// if	(document.getElementById('date-field'))
+		// this.date_field = frappe.ui.form.make_control({
+		// 	df: {
+				
+		// 		fieldtype: 'Date',
+		// 		// options:[],
+        //        // get_query: () => querys,
+		// 		placeholder: __("Visit Date"),
+        //         onchange:function(){
+        //             //  branch=this.value;
+
+		// 			// if( brand != "" && branch != ""  &&( !internal_user || (internal_user && phone != "")))
+		// 			// 	{$('.custom-calendar').removeClass('hidden');
+		// 			// 	// $('.selected_slot').removeClass('hidden');
+		// 			// 	}
+		// 			// else
+		// 			// {$('.custom-calendar').addClass('hidden');
+		// 			// $('.selected_slot').addClass('hidden');
+		// 			// 	}
+		// 		options =  getslotDetails($('.page_content').data('item-code'),this.value);
+		// 		window.slot_field.df.options = options;
+        //     		window.slot_field.refresh();
+        //         },
+				
+		// 	},
+		// 	parent: $('.date-field'),
+		// 	render_input: true,
+		// });
+		if	(document.getElementById('unit-field'))
+	{	
+		this.unit_field = frappe.ui.form.make_control({
+			df: {
+				
+				fieldtype: 'Select',
+				options:[],
+               // get_query: () => querys,
+				placeholder: __("Unit"),
+                onchange:function(){
+				const item_code =	$('.btn-add-to-cart').data('item-code');		
+                  unit = this.value;
+					$('#slot-field').removeClass('hidden');
+					options =  getslotLists($('.btn-add-to-cart').data('item-code'),date,unit);
+					frappe.call({
+						"method": "vim.api.get_price",
+						async: true,
+						args : {"item_code" : item_code,
+						"uom" : unit},
+						callback: function (r) {
+							if( r.message['formatted_price'])
+							document.getElementById('uom_price').innerHTML= r.message['formatted_price'];
+						}
+					});	
+
+                },
+				
+			},
+			parent: $('.unit-field'),
+			render_input: true,
+		});}
+		if	(document.getElementById('slot-field'))
+		this.slot_field = frappe.ui.form.make_control({
+			df: {
+				
+				fieldtype: 'Select',
+				options:[],
+               // get_query: () => querys,
+				placeholder: __("Available Slot"),
+                onchange:function(){
+                    //  branch=this.value;
+
+					// if( brand != "" && branch != ""  &&( !internal_user || (internal_user && phone != "")))
+					// 	{$('.custom-calendar').removeClass('hidden');
+					// 	// $('.selected_slot').removeClass('hidden');
+					// 	}
+					// else
+					// {$('.custom-calendar').addClass('hidden');
+					// $('.selected_slot').addClass('hidden');
+					// 	}
+					$('#Slot').removeClass('hidden');
+					var strings = this.value.split(' ')
+
+					slot = strings.slice(0,strings.length-1).join(' ');
+					var visit_time = strings[strings.length-1];
+					document.getElementById('Slot').innerHTML= "Visit Date : " +date +"<br>" + "Visit Time : "+visit_time;
+										//  +" - " +info.event.extendedProps.slot_end;
+										//  additional_note = "Visit Date : " +date +"&#13;&#10;" + "Visit Time : "+visit_time;
+										//  +" - " +info.event.extendedProps.slot_end;
+										// document.getElementById('Slot_date').innerHTML= info.event.extendedProps.slot_date;
+										// slot = info.event.extendedProps.name;
+										date = date;
+										// (!internal_user || (internal_user && phone != ""))
+					if( brand != "" && branch != ""  &&( !internal_user || (internal_user && phone != "")))
+										$('.btn-add-to-cart').removeClass('hidden');
+                },
+				
+			},
+			parent: $('.slot-field'),
+			render_input: true,
+		});
+		// options =  getslotDetails($('.page_content').data('item-code'),'');
+		// console.log(options);
+				// this.date_field = frappe.ui.form.make_control({
+				// 	df: {
+						
+				// 		fieldtype: 'Date',
+				// 		// options:["option1","option2"],
+				//        // get_query: () => querys,
+				// 		placeholder: __("Slot Date"),
+				//         onchange:function(){
+				//             date=this.value	
+				// 				console.log(date);											
+				// 		// 	me.clear_cart();
+				//         //    if(date)
+				// 		//    {
+				//         //     me.make_item_slot(slot,cur_pos.cart.event_field.value)
+				// 		//    }
+				//         },
+						
+				// 	},
+				// 	parent: $('.visit-date'),
+				// 	render_input: true,
+				// });
+				$('.custom-calendar').click((e) => {
+					// openForm();
+					calendar_render();
+
+				});
+
+        var brandlist=[];var branchlist=[];var phonelist = [];var unitlist = [];
+
+        frappe.call({
+				"method": "vim.api.is_internal_user",
+				async: true,
+				callback: function (r) {
+                    internal_user = r.message;
+					// console.log(r)
+                    if (internal_user ){
+                        $('.phone-field').removeClass('hidden');
+						$('.btn-add-to-cart').addClass('hidden');
+                    }
+				}
+			});						
+		frappe.call({
+				"method": "vim.api.get_branch_details",
+				async: true,
+				args:{item_code:item_code?item_code:''},
+				// args:{item_name:select_event?select_event:'',is_new:0,delivery_date:delivery_date?delivery_date:''},
+				callback: function (r) {
+									
+					
+					// brandlist = (r.message['brand_list'] || []);    
+					branchlist = (r.message['branch_list'] || []);
+					phonelist = (r.message['phone_list'] || []);
+					unitlist = (r.message['uom_list'] || []);
+					brand = r.message['brand_list'] 
+				
+					if(window.branch_field)
+				{	window.branch_field.df.options = branchlist;
+            		window.branch_field.refresh();}
+			
+                    // console.log(phonelist)
+                    autocomplete(document.getElementById("input_search"), phonelist);
+					
+					if(window.unit_field)
+					{window.unit_field.df.options = unitlist;
+            		window.unit_field.refresh();}
+					// return slotlist;
+					if(window.branch_field)
+					frappe.call({
+				"method": "vim.api.get_branch_list",
+				async: true,
+				args:{brand:brand},
+				// args:{item_name:select_event?select_event:'',is_new:0,delivery_date:delivery_date?delivery_date:''},
+				callback: function (r) {
+					branch = "";			
+					branchlist = (r.message['branch_list'] || []);						
+					window.branch_field.df.options = branchlist;
+            		window.branch_field.refresh();
+					if( brand != "" && branch != ""  &&( !internal_user || (internal_user && phone != "")))
+						{$('.custom-calendar').removeClass('hidden');
+						}
+					else
+					{$('.custom-calendar').addClass('hidden');
+					// $('.selected_slot').addClass('hidden');
+						}
+					// return slotlist;
+				}
+			});
+				
+				}
+			});
+	});
+	
+
+	// $('.fc-timegrid-slot-minor').click((e) => {
+	// 		// openForm();
+	// 		console.log(e);
+    //     });
+	const item_code =	$('.btn-add-to-cart').data('item-code');
+	var calendarEl = document.getElementById('calendar');
+
+	function calendar_render (){
+	
+		// $('.form-popup').addClass('hidden');
+					openForm();
+
+					frappe.call({
+										method: "vim.api.vim_get_event_bookings",
+										args :{
+											item_code :	item_code,
+											branch : branch,
+											brand : brand
+										},
+										type: "GET",
+										callback: function(r) {
+											var events_list = (r.message || []).map(d => {
+											d.id = d.name;
+								// d.editable = frappe.model.can_write(d.doctype || me.doctype);
+
+								// do not allow submitted/cancelled events to be moved / extended
+								// if(d.docstatus && d.docstatus > 0) {
+								// 	d.editable = false;
+								// }
+								d.editable = false;
+
+								// $.each(me.field_map, function(target, source) {
+								// 	d[target] = d[source];
+								// });
+
+								// if(!me.field_map.allDay)
+								// 	d.allDay = 1;
+
+								// convert to user tz
+								// d.start = frappe.datetime.convert_to_user_tz(d.start);
+								// d.end = frappe.datetime.convert_to_user_tz(d.end);
+
+								// show event on single day if start or end date is invalid
+								// if (!frappe.datetime.validate(d.start) && d.end) {
+								// 	d.start = frappe.datetime.add_days(d.end, -1);
+								// }
+
+								// if (d.start && !frappe.datetime.validate(d.end)) {
+								// 	d.end = frappe.datetime.add_days(d.start, 1);
+								// }
+
+								// me.fix_end_date_for_event_render(d);
+								// me.prepare_colors(d);
+
+								d.title = frappe.utils.html2text(d.title);
+								
+								return d;
+							});
+						// events = me.prepare_events(events);
+						// console.log(events_list);
+						// callback(events);
+						calendarEl.innerHTML ="";
+						var calendar = new FullCalendar.Calendar(calendarEl, {
+								initialView: 'dayGridMonth',
+								// initialDate: '2021-07-07',
+								headerToolbar: {
+									left: 'prev,next today',
+									// center: 'title,addEventButton',
+									center: 'title',
+									right: 'dayGridMonth,timeGridWeek,timeGridDay'
+								},
+									// customButtons: {
+									// addEventButton: {
+									// 	text: 'add event...',
+									// 	click: function() {
+									// 	var dateStr = prompt('Enter a date in YYYY-MM-DD format');
+									// 	var date = new Date(dateStr + 'T00:00:00'); // will be in local time
+
+									// 	if (!isNaN(date.valueOf())) { // valid?
+									// 		calendar.addEvent({
+									// 		title: 'dynamic event',
+									// 		start: date,
+									// 		allDay: true
+									// 		});
+									// 		alert('Great. Now, update your database...');
+									// 	} else {
+									// 		alert('Invalid date.');
+									// 	}
+									// 	}
+									// }
+									// },
+								events: events_list,
+								timeFormat: 'H(:mm)',
+								eventMouseEnter: function( event, jsEvent, view  ) {
+									// console.log( event, jsEvent, view )
+								 },
+								eventClick: function(  info ) {
+								if(info.event.extendedProps.clickable){
+									// if(confirm("Select slot ? "+info.event.extendedProps.name +" "+ info.event.startStr +" "+ info.event.endStr))
+									// {	
+										$('.selected_slot').removeClass('hidden');
+										info.event.title = "Selected";
+										// console.log(info);
+										document.getElementById('Slot').innerHTML= "Visit Date : " +info.event.extendedProps.slot_date +"<br>" + "Visit Time : "+info.event.extendedProps.slot_start
+										 +" - " +info.event.extendedProps.slot_end;
+										//  additional_note = "Visit Date : " +info.event.extendedProps.slot_date +"&#13;&#10;" + "Visit Time : "+info.event.extendedProps.slot_start
+										//  +" - " +info.event.extendedProps.slot_end;
+										// document.getElementById('Slot_date').innerHTML= info.event.extendedProps.slot_date;
+										slot = info.event.extendedProps.name;
+										date = info.event.extendedProps.slot_date;
+										$('.btn-add-to-cart').removeClass('hidden');
+										closeForm()
+									// }
+								}
+								 },
+								dateClick: function(info) {
+								// alert('clicked ' + info.dateStr);
+								calendar.changeView('timeGridDay', info.dateStr);
+								},
+								 select: function(info) {
+									// alert('selected ' + info.startStr + ' to ' + info.endStr);
+									}
+								});
+
+								calendar.render();
+								// closeForm();
+								// $('.form-popup').removeClass('hidden');
+									// console.log(calendar);
+
+													}
+							});
+
+					}
+	  document.addEventListener('DOMContentLoaded', function() {
+
+	function get_system_datetime(date) {
+		
+var date = new Date();
+var offset = date.getTimezoneOffset();
+		// date._offset = (moment(date).tz(frappe.sys_defaults.time_zone)._offset);
+		return offset;
+	}
+
+
+});
+
+</script>
+
+{% endif %}

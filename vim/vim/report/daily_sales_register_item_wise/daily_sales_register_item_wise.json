@@ -1,0 +1,29 @@
+{
+ "add_total_row": 1,
+ "columns": [],
+ "creation": "2021-11-29 16:16:14.531084",
+ "disable_prepared_report": 0,
+ "disabled": 0,
+ "docstatus": 0,
+ "doctype": "Report",
+ "filters": [],
+ "idx": 0,
+ "is_standard": "Yes",
+ "modified": "2022-01-18 11:30:45.131942",
+ "modified_by": "Administrator",
+ "module": "VIM",
+ "name": "Daily Sales Register Item-wise",
+ "owner": "Administrator",
+ "prepared_report": 0,
+ "ref_doctype": "POS Invoice",
+ "report_name": "Daily Sales Register Item-wise",
+ "report_type": "Script Report",
+ "roles": [
+  {
+   "role": "Accounts Manager"
+  },
+  {
+   "role": "Accounts User"
+  }
+ ]
+}

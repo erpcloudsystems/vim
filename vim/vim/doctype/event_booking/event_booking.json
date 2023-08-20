@@ -1,0 +1,172 @@
+{
+ "actions": [],
+ "autoname": "field:subject",
+ "creation": "2021-07-20 15:21:24.088624",
+ "doctype": "DocType",
+ "editable_grid": 1,
+ "engine": "InnoDB",
+ "field_order": [
+  "subject",
+  "event_item",
+  "slot",
+  "branch",
+  "from_time",
+  "no_of_participants",
+  "note",
+  "column_break_5",
+  "date",
+  "department",
+  "brand",
+  "city",
+  "to_time",
+  "hall_id",
+  "reference_name",
+  "reference_id",
+  "customer_name",
+  "color",
+  "renew_sms_sent_to_customer",
+  "send_sms"
+ ],
+ "fields": [
+  {
+   "fieldname": "subject",
+   "fieldtype": "Data",
+   "label": "Subject",
+   "unique": 1
+  },
+  {
+   "fieldname": "branch",
+   "fieldtype": "Link",
+   "label": "Branch",
+   "options": "Dimension Branch"
+  },
+  {
+   "fieldname": "from_time",
+   "fieldtype": "Time",
+   "label": "From Time"
+  },
+  {
+   "fieldname": "no_of_participants",
+   "fieldtype": "Int",
+   "label": "No Of Participants"
+  },
+  {
+   "fieldname": "column_break_5",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "date",
+   "fieldtype": "Date",
+   "label": "Date"
+  },
+  {
+   "fieldname": "department",
+   "fieldtype": "Link",
+   "label": "Department",
+   "options": "Dimension Department"
+  },
+  {
+   "fieldname": "to_time",
+   "fieldtype": "Time",
+   "label": "To Time"
+  },
+  {
+   "fieldname": "hall_id",
+   "fieldtype": "Data",
+   "label": "Hall Id"
+  },
+  {
+   "fieldname": "reference_name",
+   "fieldtype": "Link",
+   "label": "Reference Name",
+   "options": "DocType",
+   "read_only": 1
+  },
+  {
+   "fieldname": "reference_id",
+   "fieldtype": "Dynamic Link",
+   "label": "Reference Id",
+   "options": "reference_name",
+   "read_only": 1
+  },
+  {
+   "fieldname": "brand",
+   "fieldtype": "Link",
+   "label": "Brand",
+   "options": "Dimension Brand"
+  },
+  {
+   "fieldname": "city",
+   "fieldtype": "Link",
+   "label": "City",
+   "options": "Dimension City"
+  },
+  {
+   "fieldname": "event_item",
+   "fieldtype": "Link",
+   "label": "Event Item",
+   "options": "Item"
+  },
+  {
+   "fieldname": "slot",
+   "fieldtype": "Data",
+   "label": "Slot"
+  },
+  {
+   "fieldname": "note",
+   "fieldtype": "Text",
+   "label": "Note"
+  },
+  {
+   "fetch_from": "reference_id.customer_name",
+   "fetch_if_empty": 1,
+   "fieldname": "customer_name",
+   "fieldtype": "Data",
+   "label": "Customer Name",
+   "read_only": 1
+  },
+  {
+   "fetch_from": "branch.color",
+   "fieldname": "color",
+   "fieldtype": "Color",
+   "label": "Color",
+   "read_only": 1
+  },
+  {
+   "default": "0",
+   "fieldname": "renew_sms_sent_to_customer",
+   "fieldtype": "Check",
+   "label": "Renew SMS Sent to Customer",
+   "read_only": 1
+  },
+  {
+   "fieldname": "send_sms",
+   "fieldtype": "Button",
+   "label": "Send sms"
+  }
+ ],
+ "index_web_pages_for_search": 1,
+ "links": [],
+ "modified": "2023-07-14 08:32:06.786241",
+ "modified_by": "Administrator",
+ "module": "VIM",
+ "name": "Event Booking",
+ "owner": "Administrator",
+ "permissions": [
+  {
+   "create": 1,
+   "delete": 1,
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "System Manager",
+   "share": 1,
+   "write": 1
+  }
+ ],
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "track_changes": 1
+}

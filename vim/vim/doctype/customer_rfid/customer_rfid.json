@@ -1,0 +1,117 @@
+{
+ "actions": [],
+ "autoname": "format:RFID-{pos_invoice}-{#####}",
+ "creation": "2022-02-24 10:00:11.641561",
+ "doctype": "DocType",
+ "editable_grid": 1,
+ "engine": "InnoDB",
+ "field_order": [
+  "pos_invoice",
+  "no_of_gusts",
+  "add_gusts",
+  "column_break_3",
+  "customer",
+  "sales_order",
+  "section_break_6",
+  "gust_detail"
+ ],
+ "fields": [
+  {
+   "fieldname": "pos_invoice",
+   "fieldtype": "Link",
+   "in_list_view": 1,
+   "label": "POS Invoice",
+   "options": "POS Invoice",
+   "reqd": 1
+  },
+  {
+   "fieldname": "no_of_gusts",
+   "fieldtype": "Int",
+   "in_list_view": 1,
+   "label": "No of Guests"
+  },
+  {
+   "fieldname": "column_break_3",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "customer",
+   "fieldtype": "Link",
+   "in_list_view": 1,
+   "label": "Customer",
+   "options": "Customer",
+   "read_only": 1,
+   "reqd": 1
+  },
+  {
+   "fieldname": "add_gusts",
+   "fieldtype": "Button",
+   "label": "Add Guests"
+  },
+  {
+   "fieldname": "section_break_6",
+   "fieldtype": "Section Break"
+  },
+  {
+   "fieldname": "gust_detail",
+   "fieldtype": "Table",
+   "label": "Family/Guest Detail",
+   "options": "Customer RFID Child"
+  },
+  {
+   "fieldname": "sales_order",
+   "fieldtype": "Link",
+   "label": " Sales Order",
+   "options": "Sales Order",
+   "read_only": 1
+  }
+ ],
+ "index_web_pages_for_search": 1,
+ "links": [],
+ "modified": "2022-03-04 08:52:32.348434",
+ "modified_by": "Administrator",
+ "module": "VIM",
+ "name": "Customer RFID",
+ "owner": "Administrator",
+ "permissions": [
+  {
+   "create": 1,
+   "delete": 1,
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "System Manager",
+   "share": 1,
+   "write": 1
+  },
+  {
+   "create": 1,
+   "delete": 1,
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "POS User",
+   "share": 1,
+   "write": 1
+  },
+  {
+   "create": 1,
+   "delete": 1,
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "Sales User",
+   "share": 1,
+   "write": 1
+  }
+ ],
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "track_changes": 1
+}

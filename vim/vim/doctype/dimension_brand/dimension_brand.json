@@ -1,0 +1,61 @@
+{
+ "actions": [],
+ "autoname": "field:brand_name",
+ "creation": "2021-08-23 15:34:18.884043",
+ "doctype": "DocType",
+ "editable_grid": 1,
+ "engine": "InnoDB",
+ "field_order": [
+  "brand_code",
+  "brand_name"
+ ],
+ "fields": [
+  {
+   "fieldname": "brand_name",
+   "fieldtype": "Data",
+   "label": "Brand Name",
+   "unique": 1
+  },
+  {
+   "fieldname": "brand_code",
+   "fieldtype": "Data",
+   "in_list_view": 1,
+   "label": "Brand Code",
+   "reqd": 1,
+   "unique": 1
+  }
+ ],
+ "index_web_pages_for_search": 1,
+ "links": [],
+ "modified": "2021-09-21 14:00:38.092534",
+ "modified_by": "Administrator",
+ "module": "VIM",
+ "name": "Dimension Brand",
+ "owner": "Administrator",
+ "permissions": [
+  {
+   "create": 1,
+   "delete": 1,
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "System Manager",
+   "share": 1,
+   "write": 1
+  },
+  {
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "Guest",
+   "share": 1
+  }
+ ],
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "track_changes": 1
+}

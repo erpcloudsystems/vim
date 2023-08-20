@@ -1,0 +1,76 @@
+{
+ "actions": [],
+ "allow_rename": 1,
+ "creation": "2021-08-06 13:31:53.463830",
+ "doctype": "DocType",
+ "document_type": "Document",
+ "editable_grid": 1,
+ "engine": "InnoDB",
+ "field_order": [
+  "schedule_date",
+  "pos_invoice",
+  "depreciation_amount",
+  "column_break_3",
+  "accumulated_depreciation_amount",
+  "journal_entry"
+ ],
+ "fields": [
+  {
+   "fieldname": "schedule_date",
+   "fieldtype": "Date",
+   "in_list_view": 1,
+   "label": "Schedule Date",
+   "no_copy": 1,
+   "reqd": 1
+  },
+  {
+   "fieldname": "pos_invoice",
+   "fieldtype": "Link",
+   "label": "POS Invoice",
+   "options": "POS Invoice"
+  },
+  {
+   "fieldname": "depreciation_amount",
+   "fieldtype": "Currency",
+   "in_list_view": 1,
+   "label": "Depreciation Amount",
+   "no_copy": 1,
+   "options": "Company:company:default_currency",
+   "reqd": 1
+  },
+  {
+   "fieldname": "column_break_3",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "accumulated_depreciation_amount",
+   "fieldtype": "Currency",
+   "in_list_view": 1,
+   "label": "Accumulated Depreciation Amount",
+   "no_copy": 1,
+   "options": "Company:company:default_currency",
+   "read_only": 1
+  },
+  {
+   "depends_on": "eval:doc.docstatus==1",
+   "fieldname": "journal_entry",
+   "fieldtype": "Link",
+   "in_list_view": 1,
+   "label": "Journal Entry",
+   "no_copy": 1,
+   "options": "Journal Entry",
+   "read_only": 1
+  }
+ ],
+ "istable": 1,
+ "links": [],
+ "modified": "2021-08-13 10:21:18.256513",
+ "modified_by": "Administrator",
+ "module": "VIM",
+ "name": "Invoice Schedule",
+ "owner": "Administrator",
+ "permissions": [],
+ "quick_entry": 1,
+ "sort_field": "modified",
+ "sort_order": "DESC"
+}

@@ -1,0 +1,166 @@
+{
+ "actions": [],
+ "autoname": "field:branch_name",
+ "creation": "2021-08-24 09:41:28.630989",
+ "doctype": "DocType",
+ "editable_grid": 1,
+ "engine": "InnoDB",
+ "field_order": [
+  "branch_code",
+  "branch_name",
+  "allow_multiple_event",
+  "default_warehouse",
+  "brand",
+  "city",
+  "color",
+  "weekend_days_selection_section",
+  "sunday",
+  "monday",
+  "tuesday",
+  "wednesday",
+  "thursday",
+  "friday",
+  "saturday",
+  "weekend_days",
+  "rate_for_specific_date"
+ ],
+ "fields": [
+  {
+   "fieldname": "branch_name",
+   "fieldtype": "Data",
+   "label": "Branch Name",
+   "unique": 1
+  },
+  {
+   "fieldname": "default_warehouse",
+   "fieldtype": "Link",
+   "in_list_view": 1,
+   "label": "Default Warehouse",
+   "options": "Warehouse",
+   "reqd": 1
+  },
+  {
+   "fieldname": "brand",
+   "fieldtype": "Link",
+   "label": "Brand",
+   "options": "Dimension Brand"
+  },
+  {
+   "fieldname": "branch_code",
+   "fieldtype": "Data",
+   "label": "Branch Code",
+   "reqd": 1,
+   "unique": 1
+  },
+  {
+   "fieldname": "city",
+   "fieldtype": "Link",
+   "label": "City",
+   "options": "Dimension City",
+   "reqd": 1
+  },
+  {
+   "fieldname": "weekend_days_selection_section",
+   "fieldtype": "Section Break",
+   "label": "Weekend Days Selection"
+  },
+  {
+   "default": "0",
+   "fieldname": "sunday",
+   "fieldtype": "Check",
+   "label": "Sunday"
+  },
+  {
+   "default": "0",
+   "fieldname": "monday",
+   "fieldtype": "Check",
+   "label": "Monday"
+  },
+  {
+   "default": "0",
+   "fieldname": "tuesday",
+   "fieldtype": "Check",
+   "label": "Tuesday"
+  },
+  {
+   "default": "0",
+   "fieldname": "wednesday",
+   "fieldtype": "Check",
+   "label": "Wednesday"
+  },
+  {
+   "default": "0",
+   "fieldname": "thursday",
+   "fieldtype": "Check",
+   "label": "Thursday"
+  },
+  {
+   "default": "0",
+   "fieldname": "friday",
+   "fieldtype": "Check",
+   "label": "Friday"
+  },
+  {
+   "default": "0",
+   "fieldname": "saturday",
+   "fieldtype": "Check",
+   "label": "Saturday"
+  },
+  {
+   "fieldname": "weekend_days",
+   "fieldtype": "Data",
+   "label": "Weekend Days",
+   "read_only": 1
+  },
+  {
+   "fieldname": "rate_for_specific_date",
+   "fieldtype": "Table",
+   "label": "Rate for Specific Date",
+   "options": "Rate for Specific Date"
+  },
+  {
+   "fieldname": "color",
+   "fieldtype": "Color",
+   "label": "Color"
+  },
+  {
+   "default": "0",
+   "fieldname": "allow_multiple_event",
+   "fieldtype": "Check",
+   "label": "Allow Multiple Event"
+  }
+ ],
+ "index_web_pages_for_search": 1,
+ "links": [],
+ "modified": "2023-07-03 13:07:36.678434",
+ "modified_by": "Administrator",
+ "module": "VIM",
+ "name": "Dimension Branch",
+ "owner": "Administrator",
+ "permissions": [
+  {
+   "create": 1,
+   "delete": 1,
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "System Manager",
+   "share": 1,
+   "write": 1
+  },
+  {
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "Guest",
+   "share": 1
+  }
+ ],
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "track_changes": 1
+}

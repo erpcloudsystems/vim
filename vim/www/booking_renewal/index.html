@@ -1,0 +1,151 @@
+<style>
+    .main-report-container{
+        /* position:fixed; */
+        font-size: 12px;
+        text-align: center;
+    }
+
+    .main-report-container .backdrop{
+        display: none;
+        position:absolute;
+        height: 100%;
+        width: 100%;
+        top: 0;
+        background-color: white;
+        opacity: 0.5;
+        text-align: center;
+    }
+
+    .main-report-container button {
+        float: center;
+    }
+
+    /* nav.navbar{
+        display: none;
+    } */
+    .footer-grouped-links{
+        display: none;
+    }
+    .navbar-toggler{
+        display: none;
+    }
+    #language-switcher{
+        display: none;
+    }
+    .text-right{
+        display: none;
+    }
+    .ml-auto{
+        display: none;
+    }
+    .navbar-brand{
+        margin-top:20px
+
+    }.ql-editor{
+        display: none;
+    }
+    .container{display: block !important;
+    text-align: center !important;}
+    .footer-logo-extension{
+        display: none; 
+    }
+    /* .footer-col-left{
+    flex: 0 0 0; 
+    max-width: 0;
+    } */
+    /* max-width: 50%;
+    /* .web-footer{
+        display: none;
+    } */
+</style>
+<div class="main-report-container" style="text-align: center;">
+    <div class="backdrop"></div>
+    
+    <div style="color: brown;font: bold;font-size: large;">Booking Details</div>
+    <div style="color: rgb(42, 99, 165);font: bold;text-align: center;" id="report_container">
+       
+    </div>
+    <div id="booked_status">
+       
+    </div>
+    <button id="renew_btn"  class="btn btn-primary" onclick="renewbooking();">Renew Booking</button>
+</div>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"
+    integrity="sha512-GsLlZN/3F2ErC5ifS5QtgpiJtWd43JWSuIgh7mbzZ8zBps+dvLusV+eNQATqgA/HdeKFVgA5v3S/cIrLF7QnIg=="
+    crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <script type="text/javascript" src="https://code.jquery.com/jquery-1.7.1.min.js"></script>
+<script>
+     $(document).ready(function() {
+        console.log('data')
+            frappe.call({   
+                method: "vim.www.booking_renewal.index.get_booking_renewal_body",
+                args:{'url':window.location.href}
+                , callback: function (r) {
+                    if (r.message) {
+
+                        var data = r.message
+                       
+                        var so_detail=data[0]
+                       console.log(so_detail)
+                            var html=`<div style="font-size: large;">Booking Id : <p id="so-no"> ${(so_detail[0].so_no)}</p>
+				            Event : ${(so_detail[0].event)} </br>City : ${(so_detail[0].city)} </br>Branch : ${(so_detail[0].branch)}
+                        </br>Slot : ${so_detail[0].select_slot}
+                        `
+                        if(so_detail[0].invoice){
+                            html=html+`<p style="font: bold;font-size: large;color: darkgreen;">Extended reference : ${so_detail[0].invoice}</p>`
+                        }
+                      html=  html+`</div>
+				<div class="seperator"></div>`
+                        if(!data[1]){
+                           
+                            $('#report_container').html(html)
+                        }
+                        else{
+
+                            $('#report_container').html(html)
+                            $('#renew_btn').hide()
+                        }
+                        
+
+                    }
+                }
+            });
+});
+function renewbooking() {
+        var backdrop = $('.main-report-container .backdrop')
+        backdrop.css("display", "block")
+        frappe.confirm('Are you sure you want to proceed?',
+            () => {
+                frappe.call({   
+                method: "vim.www.booking_renewal.index.create_sales_invoice",
+                args:{'sales_order':so}
+                , callback: function (r) {
+                    if (r.message) {
+
+                        var data = r.message
+                        $('#booked_status').html(data)
+                        window.location.reload();
+                            alert('Your Booking extension request Processed successfully. Your reference no: '+data[0][0].invoice)
+                            // frappe.show_alert({
+                            //     message: __('Your Booking extension request Processed successfully. Your reference no'+data[0][0].invoice),
+                            //             indicator:'green'
+                            // }, 5);
+
+                        // frappe.msgprint({
+                        // title: __('Notification'),
+                        // indicator: 'green',
+                        // message: __('Your Booking extension request Processed successfully. Your reference no'+data[0][0].invoice)
+                        // });
+                        //location.reload();
+                
+                    }
+                }
+            });
+         }, () => {
+            location.reload();
+        })
+        var elem = document.getElementById('report_container');
+        var so=$('#so-no').text()
+        
+    }
+</script>
