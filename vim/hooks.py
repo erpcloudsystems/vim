@@ -210,9 +210,9 @@ scheduler_events = {
 # ------------------------------
 #
 override_whitelisted_methods = {
-	"erpnext.shopping_cart.product_info.get_product_info_for_website": "vim.api.get_product_info_for_website",
-	"erpnext.shopping_cart.cart.update_cart": "vim.api.update_cart",
-	"erpnext.shopping_cart.cart.place_order": "vim.api.place_order",
+	"erpnext.e_commerce.shopping_cart.product_info.get_product_info_for_website": "vim.api.get_product_info_for_website",
+	"erpnext.e_commerce.shopping_cart.cart.update_cart": "vim.api.update_cart",
+	"erpnext.e_commerce.shopping_cart.cart.place_order": "vim.api.place_order",
 	"erpnext.selling.doctype.sales_order.sales_order.make_work_orders": "vim.custom_script.sales_order.sales_order.make_work_orders",
 	"frappe.core.doctype.user.user.sign_up": "vim.api.sign_up",
 	"frappe.core.doctype.user.user.update_password": "vim.api.update_password"

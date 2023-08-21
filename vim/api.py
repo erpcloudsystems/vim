@@ -4,10 +4,10 @@ import frappe
 from frappe import throw, _
 from erpnext.e_commerce.doctype.e_commerce_settings.e_commerce_settings \
 	import get_shopping_cart_settings, show_quantity_in_website
-from erpnext.shopping_cart.cart import _get_cart_quotation, _set_price_list
-from erpnext.utilities.product import get_price as get_price_default, get_qty_in_stock, get_non_stock_item_status
+from erpnext.e_commerce.shopping_cart.cart import _get_cart_quotation, _set_price_list
+from erpnext.utilities.product import get_price as get_price_default, get_web_item_qty_in_stock, get_non_stock_item_status
 from frappe.utils import flt,cint,fmt_money
-from erpnext.shopping_cart.cart import * 
+from erpnext.e_commerce.shopping_cart.cart import * 
 from frappe.core.doctype.user.user import *
 from frappe.core.doctype.sms_settings.sms_settings import send_sms
 from frappe.utils import cstr
@@ -90,7 +90,7 @@ def get_product_info_for_website(item_code, skip_quotation_creation=False):
 		cart_settings.company
 	)
 
-	stock_status = get_qty_in_stock(item_code, "website_warehouse")
+	stock_status = get_web_item_qty_in_stock(item_code, "website_warehouse")
 	product_info = {
 		"price": price,
 		"stock_qty": stock_status.stock_qty,
@@ -408,7 +408,7 @@ def place_order(restapi = False , advance_amount = 0, payment_status = '', trans
 			item.reserved_warehouse, is_stock_item = frappe.db.get_value("Item",
 				item.item_code, ["website_warehouse", "is_stock_item"])
 			if is_stock_item:
-				item_stock = get_qty_in_stock(item.item_code, "website_warehouse")
+				item_stock = get_web_item_qty_in_stock(item.item_code, "website_warehouse")
 				if not cint(item_stock.in_stock):
 					throw(_("{1} Not in Stock").format(item.item_code))
 				if item.qty > item_stock.stock_qty[0][0]:
@@ -1115,7 +1115,7 @@ def create_customer_or_supplier():
 
 	party = frappe.new_doc(doctype)
 	fullname = frappe.utils.get_fullname(user)
-	from erpnext.shopping_cart.cart import get_debtors_account
+	from erpnext.e_commerce.shopping_cart.cart import get_debtors_account
 	from frappe.utils.nestedset import get_root_of
 	if doctype == 'Customer':
 		cart_settings = get_shopping_cart_settings()
