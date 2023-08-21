@@ -1,4 +1,3 @@
-
 from __future__ import unicode_literals
 import frappe,erpnext
 from frappe.utils import cint, flt, cstr, get_link_to_form, nowtime
@@ -9,7 +8,7 @@ from erpnext.stock.get_item_details import get_conversion_factor
 from erpnext.stock.doctype.item.item import set_item_default
 from frappe.contacts.doctype.address.address import get_address_display
 from erpnext.controllers.accounts_controller import get_taxes_and_charges
-from erpnext.accounts.utils import get_fiscal_year, check_if_stock_and_account_balance_synced
+from erpnext.accounts.utils import get_fiscal_year#, check_if_stock_and_account_balance_synced
 from erpnext.controllers.stock_controller import StockController
 from erpnext.stock.stock_ledger import get_valuation_rate
 from erpnext.controllers.sales_and_purchase_return import get_rate_for_return
